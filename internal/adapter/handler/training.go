@@ -32,13 +32,13 @@ func (th *TrainingHandler) CreateTraining(c *gin.Context) {
 	var req CreateTrainingReq
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"error": fmt.Sprintf("title, description, date, duration and instructor are required: %v", err.Error()),
 		})
 		return
 	}
 
 	// parse string date
-	dateLayout := "01-02-2006 15:04:05"
+	dateLayout := "2006-01-02"
 	date, err := util.ParseDate(dateLayout, req.Date)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
