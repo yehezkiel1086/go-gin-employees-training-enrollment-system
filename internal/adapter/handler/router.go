@@ -10,20 +10,25 @@ type Router struct {
 }
 
 func InitRouter(
+	conf *config.JWT,
 	userHandler *UserHandler,
 	authHandler *AuthHandler,
 ) *Router {
 	r := gin.New()
 
 	pb := r.Group("/api/v1")
+	us := pb.Group("/", AuthMiddleware(conf))
+	ad := us.Group("/", AdminAuthMiddleware())
 
 	// public routes
 	pb.POST("/register", userHandler.RegisterNewUser)
 	pb.POST("/login", authHandler.Login)
 
 	// user only routes
-	pb.GET("/users", userHandler.GetUsers)
-	pb.GET("/users/:email", userHandler.GetUserByEmail)
+	us.GET("/users/:email", CheckEmailParam(), userHandler.GetUserByEmail)
+
+	// admin only routes
+	ad.GET("/users", userHandler.GetUsers)
 
 	return &Router{
 		r: r,

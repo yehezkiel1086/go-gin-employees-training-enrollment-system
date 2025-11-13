@@ -46,6 +46,7 @@ func main() {
 
 	// init router
 	r := handler.InitRouter(
+		conf.JWT,
 		userHandler,
 		authHandler,
 	)

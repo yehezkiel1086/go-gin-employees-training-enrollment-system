@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/core/domain"
@@ -22,6 +23,14 @@ type RegisterReq struct {
 	Name string `json:"name" binding:"required"`
 	Email string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required,min=8"`
+}
+
+type UserRes struct {
+	ID uint `json:"id"`
+	Name string `json:"name"`
+	Email string `json:"email"`
+	Role domain.Role `json:"role"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 func (uh *UserHandler) RegisterNewUser(c *gin.Context) {
@@ -55,7 +64,18 @@ func (uh *UserHandler) GetUsers(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, users)
+	var usersRes []UserRes
+	for _, user := range users {
+		usersRes = append(usersRes, UserRes{
+			ID: user.ID,
+			Name: user.Name,
+			Email: user.Email,
+			Role: user.Role,
+			CreatedAt: user.CreatedAt,
+		})
+	}
+
+	c.JSON(http.StatusOK, usersRes)
 }
 
 func (uh *UserHandler) GetUserByEmail(c *gin.Context) {
