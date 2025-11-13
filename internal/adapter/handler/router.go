@@ -13,6 +13,7 @@ func InitRouter(
 	conf *config.JWT,
 	userHandler *UserHandler,
 	authHandler *AuthHandler,
+	trainingHandler *TrainingHandler,
 ) *Router {
 	r := gin.New()
 
@@ -26,9 +27,12 @@ func InitRouter(
 
 	// user only routes
 	us.GET("/users/:email", CheckEmailParam(), userHandler.GetUserByEmail)
+	us.GET("/trainings", trainingHandler.GetTrainings)
+	us.GET("/trainings/:id", trainingHandler.GetTrainingByID)
 
 	// admin only routes
 	ad.GET("/users", userHandler.GetUsers)
+	ad.POST("/trainings", trainingHandler.CreateTraining)
 
 	return &Router{
 		r: r,
