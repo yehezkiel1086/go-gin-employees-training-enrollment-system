@@ -52,6 +52,10 @@ func main() {
 	enrollmentSvc := service.InitEnrollmentService(enrollmentRepo, userRepo)
 	enrollmentHandler := handler.InitEnrollmentHandler(enrollmentSvc)
 
+	statisticsRepo := repository.InitStatisticsRepository(db)
+	statisticsSvc := service.InitStatisticsService(statisticsRepo)
+	statisticsHandler := handler.InitStatisticsHandler(statisticsSvc)
+
 	// init router
 	r := handler.InitRouter(
 		conf.JWT,
@@ -59,6 +63,7 @@ func main() {
 		authHandler,
 		trainingHandler,
 		enrollmentHandler,
+		statisticsHandler,
 	)
 	fmt.Println("router initialized successfully")
 

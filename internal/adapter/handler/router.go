@@ -19,6 +19,7 @@ func InitRouter(
 	authHandler *AuthHandler,
 	trainingHandler *TrainingHandler,
 	enrollmentHandler *EnrollmentHandler,
+	statisticsHandler *StatisticsHandler,
 ) *Router {
 	r := gin.New()
 
@@ -51,6 +52,8 @@ func InitRouter(
 	
 	us.GET("/enrollments/:email", CheckEmailParam(), enrollmentHandler.GetEnrollmentsByEmail)
 	us.POST("/enrollments", enrollmentHandler.CreateEnrollment)
+
+	us.GET("/statistics/trainings", statisticsHandler.GetTrainingStatistics)
 
 	// admin only routes
 	ad.GET("/users", userHandler.GetUsers)
