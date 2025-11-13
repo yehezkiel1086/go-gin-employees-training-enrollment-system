@@ -31,7 +31,7 @@ func main() {
 	fmt.Println("database connected successfully")
 
 	// migrate dbs
-	if err := db.Migrate(&domain.User{}, &domain.Training{}); err != nil {
+	if err := db.Migrate(&domain.User{}, &domain.Training{}, &domain.Enrollment{}); err != nil {
 		panic(err)
 	}
 	fmt.Println("database migrated successfully")
@@ -48,6 +48,9 @@ func main() {
 	trainingSvc := service.InitTrainingService(trainingRepo)
 	trainingHandler := handler.InitTrainingHandler(trainingSvc)
 
+	enrollmentRepo := repository.InitEnrollmentRepository(db)
+	enrollmentSvc := service.InitEnrollmentService(enrollmentRepo, userRepo)
+	enrollmentHandler := handler.InitEnrollmentHandler(enrollmentSvc)
 
 	// init router
 	r := handler.InitRouter(
@@ -55,6 +58,7 @@ func main() {
 		userHandler,
 		authHandler,
 		trainingHandler,
+		enrollmentHandler,
 	)
 	fmt.Println("router initialized successfully")
 
