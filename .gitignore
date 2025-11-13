@@ -1,0 +1,8 @@
+# dev
+.env
+bin/
+
+# docker volumes
+postgres_data/
+init/
+redis_data/
