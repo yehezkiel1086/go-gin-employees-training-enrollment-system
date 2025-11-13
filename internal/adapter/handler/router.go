@@ -40,7 +40,6 @@ func InitRouter(
 	// public routes
 	pb.POST("/register", userHandler.RegisterNewUser)
 	pb.POST("/login", authHandler.Login)
-	
 
 	// user only routes
 	us.GET("/logout", authHandler.Logout)

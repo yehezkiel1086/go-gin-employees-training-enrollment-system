@@ -2,10 +2,12 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/adapter/storage/postgres"
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/core/domain"
+	"gorm.io/gorm"
 )
 
 type EnrollmentRepository struct {
@@ -20,6 +22,17 @@ func InitEnrollmentRepository(db *postgres.DB) *EnrollmentRepository {
 
 func (er *EnrollmentRepository) CreateEnrollment(ctx context.Context, UserID, TrainingID uint, EnrolledAt time.Time) error {
 	db := er.db.GetDB()
+
+	// check if enrollment already exists
+	var existingEnrollment domain.Enrollment
+	err := db.Where("user_id = ? AND training_id = ?", UserID, TrainingID).First(&existingEnrollment).Error
+	if err == nil {
+		return errors.New("user is already enrolled in this training")
+	}
+
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return err
+	}
 
 	if err := db.Create(&domain.Enrollment{
 		UserID: UserID,
