@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"strings"
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/adapter/config"
@@ -20,13 +23,15 @@ func InitRouter(
 	r := gin.New()
 
 	// Add CORS middleware
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
-	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
-	config.AllowCredentials = true
+	allowedOrigins := strings.Split(conf.AllowedOrigins, ",")
 
-	r.Use(cors.New(config))
+	r.Use(cors.New(cors.Config{
+			AllowOrigins:     allowedOrigins,
+			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+			AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+			AllowCredentials: true,
+			MaxAge:           12 * time.Hour,
+	}))
 
 	pb := r.Group("/api/v1")
 	us := pb.Group("/", AuthMiddleware(conf))
@@ -35,8 +40,11 @@ func InitRouter(
 	// public routes
 	pb.POST("/register", userHandler.RegisterNewUser)
 	pb.POST("/login", authHandler.Login)
+	
 
 	// user only routes
+	us.GET("/logout", authHandler.Logout)
+
 	us.GET("/users/:email", CheckEmailParam(), userHandler.GetUserByEmail)
 
 	us.GET("/trainings", trainingHandler.GetTrainings)

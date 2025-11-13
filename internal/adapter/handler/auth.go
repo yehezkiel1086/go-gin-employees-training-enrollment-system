@@ -79,10 +79,19 @@ func (ah *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	// set cookie to frontend
-	c.SetCookie("jwt_token", ss, tokenDuration * 1000, "", ah.conf.Host, ah.conf.Env == "production", true)
+	maxAge := tokenDuration * 60
+
+	c.SetCookie("jwt_token", ss, maxAge, "/", "", ah.conf.Env == "production", true)
 
 	c.JSON(http.StatusOK, gin.H{
 		"jwt_token": ss,
+	})
+}
+
+func (ah *AuthHandler) Logout(c *gin.Context) {
+	c.SetCookie("jwt_token", "", -1, "/", "", ah.conf.Env == "production", true)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "user logged out successfully",
 	})
 }

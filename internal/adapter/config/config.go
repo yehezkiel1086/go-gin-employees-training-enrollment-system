@@ -46,6 +46,7 @@ type (
 		Duration string
 		Env string
 		Host string
+		AllowedOrigins string
 	}
 )
 
@@ -87,6 +88,7 @@ func InitConfig() (*Container, error) {
 		Duration: os.Getenv("TOKEN_DURATION"),
 		Env: os.Getenv("APP_ENV"),
 		Host: os.Getenv("HTTP_HOST"),
+		AllowedOrigins: os.Getenv("HTTP_ALLOWED_ORIGINS"),
 	}
 
 	return &Container{
