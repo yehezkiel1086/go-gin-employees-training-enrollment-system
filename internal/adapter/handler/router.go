@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/adapter/config"
 )
@@ -17,6 +18,15 @@ func InitRouter(
 	enrollmentHandler *EnrollmentHandler,
 ) *Router {
 	r := gin.New()
+
+	// Add CORS middleware
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
+	config.AllowCredentials = true
+
+	r.Use(cors.New(config))
 
 	pb := r.Group("/api/v1")
 	us := pb.Group("/", AuthMiddleware(conf))
