@@ -44,6 +44,8 @@ type (
 	JWT struct {
 		Secret string
 		Duration string
+		Env string
+		Host string
 	}
 )
 
@@ -83,6 +85,8 @@ func InitConfig() (*Container, error) {
 	JWT := &JWT{
 		Secret: os.Getenv("JWT_SECRET"),
 		Duration: os.Getenv("TOKEN_DURATION"),
+		Env: os.Getenv("APP_ENV"),
+		Host: os.Getenv("HTTP_HOST"),
 	}
 
 	return &Container{
