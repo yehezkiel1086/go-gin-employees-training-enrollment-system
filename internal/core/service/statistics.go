@@ -18,3 +18,7 @@ func InitStatisticsService(repo port.StatisticsRepository) *StatisticsService {
 func (ss *StatisticsService) GetTrainingStatistics() (*domain.TrainingStatistics, error) {
 	return ss.repo.GetTrainingStatistics()
 }
+
+func (ss *StatisticsService) GetTrainingsByCategories() ([]domain.TrainingsByCategory, error) {
+	return ss.repo.GetTrainingsByCategories()
+}

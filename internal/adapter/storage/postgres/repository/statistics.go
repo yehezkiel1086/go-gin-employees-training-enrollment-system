@@ -36,3 +36,18 @@ func (sr *StatisticsRepository) GetTrainingStatistics() (*domain.TrainingStatist
 
 	return &stats, nil
 }
+
+func (sr *StatisticsRepository) GetTrainingsByCategories() ([]domain.TrainingsByCategory, error) {
+	db := sr.db.GetDB()
+	var stats []domain.TrainingsByCategory
+
+	err := db.Table("trainings").
+		Select("categories.name as category_name, count(trainings.id) as total_trainings").
+		Joins("join categories on categories.id = trainings.category_id").
+		Group("categories.name").
+		Scan(&stats).Error
+	if err != nil {
+		return nil, err
+	}
+	return stats, nil
+}

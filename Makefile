@@ -8,7 +8,7 @@ postgres:
 	docker exec -it postgres psql -U yehezkiel1086 -b employees_training
 
 build:
-	go build -o cmd/main.go bin/main
+	go build -o bin/main cmd/main.go
 
 dev:
 	go run cmd/main.go

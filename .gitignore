@@ -6,3 +6,4 @@ bin/
 postgres_data/
 init/
 redis_data/
+api_data/

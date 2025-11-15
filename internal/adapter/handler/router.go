@@ -54,6 +54,7 @@ func InitRouter(
 	us.GET("/enrollments/:email", CheckEmailParam(), enrollmentHandler.GetEnrollmentsByEmail)
 	us.POST("/enrollments", enrollmentHandler.CreateEnrollment)
 
+	us.GET("/statistics/trainings-by-categories", statisticsHandler.GetTrainingsByCategories)
 	us.GET("/statistics/trainings", statisticsHandler.GetTrainingStatistics)
 
 	us.GET("/categories", categoryHandler.GetCategories)

@@ -28,3 +28,15 @@ func (sh *StatisticsHandler) GetTrainingStatistics(c *gin.Context) {
 
 	c.JSON(http.StatusOK, stats)
 }
+
+func (sh *StatisticsHandler) GetTrainingsByCategories(c *gin.Context) {
+	stats, err := sh.svc.GetTrainingsByCategories()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, stats)
+}

@@ -5,3 +5,8 @@ type TrainingStatistics struct {
 	EnrolledTrainings       int64 `json:"enrolled_trainings"`
 	CompletedTrainings      int64 `json:"completed_trainings"`
 }
+
+type TrainingsByCategory struct {
+	CategoryName   string `json:"category_name"`
+	TotalTrainings int64  `json:"total_trainings"`
+}
