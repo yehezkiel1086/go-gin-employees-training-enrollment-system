@@ -28,3 +28,11 @@ func (ts *TrainingService) GetTrainings(ctx context.Context) ([]domain.Training,
 func (ts *TrainingService) GetTrainingByID(ctx context.Context, id string) (*domain.Training, error) {
 	return ts.repo.GetTrainingByID(ctx, id)
 }
+
+func (ts *TrainingService) DeleteTraining(ctx context.Context, training *domain.Training) error {
+	return ts.repo.DeleteTraining(ctx, training)
+}
+
+func (ts *TrainingService) UpdateTraining(ctx context.Context, training *domain.Training) (*domain.Training, error) {
+	return ts.repo.UpdateTraining(ctx, training)
+}

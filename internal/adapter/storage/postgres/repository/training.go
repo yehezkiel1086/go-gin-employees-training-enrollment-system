@@ -48,3 +48,23 @@ func (tr *TrainingRepository) GetTrainingByID(ctx context.Context, id string) (*
 
 	return &training, nil
 }
+
+func (tr *TrainingRepository) DeleteTraining(ctx context.Context, training *domain.Training) error {
+	db := tr.db.GetDB()
+
+	if err := db.Delete(training).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (tr *TrainingRepository) UpdateTraining(ctx context.Context, training *domain.Training) (*domain.Training, error) {
+	db := tr.db.GetDB()
+
+	if err := db.Save(training).Error; err != nil {
+		return nil, err
+	}
+
+	return training, nil
+}

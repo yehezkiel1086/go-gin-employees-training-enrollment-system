@@ -10,10 +10,14 @@ type TrainingRepository interface {
 	CreateTraining(ctx context.Context, training *domain.Training) (*domain.Training, error)
 	GetTrainings(ctx context.Context) ([]domain.Training, error)
 	GetTrainingByID(ctx context.Context, id string) (*domain.Training, error)
+	DeleteTraining(ctx context.Context, training *domain.Training) error
+	UpdateTraining(ctx context.Context, training *domain.Training) (*domain.Training, error)
 }
 
 type TrainingService interface {
 	CreateTraining(ctx context.Context, training *domain.Training) (*domain.Training, error)
 	GetTrainings(ctx context.Context) ([]domain.Training, error)
 	GetTrainingByID(ctx context.Context, id string) (*domain.Training, error)	
+	DeleteTraining(ctx context.Context, training *domain.Training) error
+	UpdateTraining(ctx context.Context, training *domain.Training) (*domain.Training, error)
 }

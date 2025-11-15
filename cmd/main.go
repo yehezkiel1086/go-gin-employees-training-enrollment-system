@@ -31,10 +31,15 @@ func main() {
 	fmt.Println("database connected successfully")
 
 	// migrate dbs
-	if err := db.Migrate(&domain.User{}, &domain.Training{}, &domain.Enrollment{}); err != nil {
+	if err := db.Migrate(&domain.User{}, &domain.Category{}, &domain.Training{}, &domain.Enrollment{}); err != nil {
 		panic(err)
 	}
 	fmt.Println("database migrated successfully")
+
+	// seed dbs
+	if err := postgres.Seed(db.GetDB()); err != nil {
+		panic(err)
+	}
 
 	// dependency injections	
 	userRepo := repository.InitUserRepository(db)
@@ -56,6 +61,10 @@ func main() {
 	statisticsSvc := service.InitStatisticsService(statisticsRepo)
 	statisticsHandler := handler.InitStatisticsHandler(statisticsSvc)
 
+	categoryRepo := repository.InitCategoryRepository(db)
+	categorySvc := service.InitCategoryService(categoryRepo)
+	categoryHandler := handler.InitCategoryHandler(categorySvc)
+
 	// init router
 	r := handler.InitRouter(
 		conf.JWT,
@@ -64,6 +73,7 @@ func main() {
 		trainingHandler,
 		enrollmentHandler,
 		statisticsHandler,
+		categoryHandler,
 	)
 	fmt.Println("router initialized successfully")
 
