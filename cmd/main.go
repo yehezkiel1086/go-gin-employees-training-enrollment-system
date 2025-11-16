@@ -8,6 +8,7 @@ import (
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/adapter/handler"
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/adapter/storage/postgres"
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/adapter/storage/postgres/repository"
+	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/adapter/storage/redis"
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/core/domain"
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/core/service"
 )
@@ -41,28 +42,35 @@ func main() {
 		panic(err)
 	}
 
+	// connect to redis
+	cache, err := redis.InitRedis(ctx, conf.Redis)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("redis connected successfully")
+
 	// dependency injections	
 	userRepo := repository.InitUserRepository(db)
-	userSvc := service.InitUserService(userRepo)
+	userSvc := service.InitUserService(userRepo, cache)
 	userHandler := handler.InitUserHandler(userSvc)
 
 	authSvc := service.InitAuthService(userRepo)
 	authHandler := handler.InitAuthHandler(conf.JWT, authSvc)
 
 	trainingRepo := repository.InitTrainingRepository(db)
-	trainingSvc := service.InitTrainingService(trainingRepo)
+	trainingSvc := service.InitTrainingService(trainingRepo, cache)
 	trainingHandler := handler.InitTrainingHandler(trainingSvc)
 
 	enrollmentRepo := repository.InitEnrollmentRepository(db)
-	enrollmentSvc := service.InitEnrollmentService(enrollmentRepo, userRepo)
+	enrollmentSvc := service.InitEnrollmentService(enrollmentRepo, userRepo, cache)
 	enrollmentHandler := handler.InitEnrollmentHandler(enrollmentSvc)
 
 	statisticsRepo := repository.InitStatisticsRepository(db)
-	statisticsSvc := service.InitStatisticsService(statisticsRepo)
+	statisticsSvc := service.InitStatisticsService(statisticsRepo, cache)
 	statisticsHandler := handler.InitStatisticsHandler(statisticsSvc)
 
 	categoryRepo := repository.InitCategoryRepository(db)
-	categorySvc := service.InitCategoryService(categoryRepo)
+	categorySvc := service.InitCategoryService(categoryRepo, cache)
 	categoryHandler := handler.InitCategoryHandler(categorySvc)
 
 	// init router

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"time"
 
 	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/adapter/storage/postgres"
@@ -17,8 +18,8 @@ func InitStatisticsRepository(db *postgres.DB) *StatisticsRepository {
 	}
 }
 
-func (sr *StatisticsRepository) GetTrainingStatistics() (*domain.TrainingStatistics, error) {
-	db := sr.db.GetDB()
+func (sr *StatisticsRepository) GetTrainingStatistics(ctx context.Context) (*domain.TrainingStatistics, error) {
+	db := sr.db.GetDB().WithContext(ctx)
 	var stats domain.TrainingStatistics
 
 	if err := db.Model(&domain.Training{}).Count(&stats.TotalAvailableTrainings).Error; err != nil {
@@ -37,8 +38,8 @@ func (sr *StatisticsRepository) GetTrainingStatistics() (*domain.TrainingStatist
 	return &stats, nil
 }
 
-func (sr *StatisticsRepository) GetTrainingsByCategories() ([]domain.TrainingsByCategory, error) {
-	db := sr.db.GetDB()
+func (sr *StatisticsRepository) GetTrainingsByCategories(ctx context.Context) ([]domain.TrainingsByCategory, error) {
+	db := sr.db.GetDB().WithContext(ctx)
 	var stats []domain.TrainingsByCategory
 
 	err := db.Table("trainings").

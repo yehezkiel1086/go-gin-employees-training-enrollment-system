@@ -18,7 +18,7 @@ func InitStatisticsHandler(svc port.StatisticsService) *StatisticsHandler {
 }
 
 func (sh *StatisticsHandler) GetTrainingStatistics(c *gin.Context) {
-	stats, err := sh.svc.GetTrainingStatistics()
+	stats, err := sh.svc.GetTrainingStatistics(c.Request.Context())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -30,7 +30,7 @@ func (sh *StatisticsHandler) GetTrainingStatistics(c *gin.Context) {
 }
 
 func (sh *StatisticsHandler) GetTrainingsByCategories(c *gin.Context) {
-	stats, err := sh.svc.GetTrainingsByCategories()
+	stats, err := sh.svc.GetTrainingsByCategories(c.Request.Context())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),

@@ -1,13 +1,17 @@
 package port
 
-import "github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/core/domain"
+import (
+	"context"
+
+	"github.com/yehezkiel1086/go-gin-employees-training-enrollment-system/internal/core/domain"
+)
 
 type StatisticsRepository interface {
-	GetTrainingStatistics() (*domain.TrainingStatistics, error)
-	GetTrainingsByCategories() ([]domain.TrainingsByCategory, error)
+	GetTrainingStatistics(ctx context.Context) (*domain.TrainingStatistics, error)
+	GetTrainingsByCategories(ctx context.Context) ([]domain.TrainingsByCategory, error)
 }
 
 type StatisticsService interface {
-	GetTrainingStatistics() (*domain.TrainingStatistics, error)
-	GetTrainingsByCategories() ([]domain.TrainingsByCategory, error)
+	GetTrainingStatistics(ctx context.Context) (*domain.TrainingStatistics, error)
+	GetTrainingsByCategories(ctx context.Context) ([]domain.TrainingsByCategory, error)
 }
